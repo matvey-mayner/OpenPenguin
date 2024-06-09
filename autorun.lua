@@ -2,7 +2,7 @@ local component = require("component")
 local event = require("event")
 local gpu = component.gpu
 
-gpu.setResolution(80,25)
+gpu.setResolution(80, 25)
 
 local function drawLoadingBar()
   local barWidth = 50
@@ -29,10 +29,10 @@ local function drawLoadingBar()
 end
 
 gpu.setForeground(0xFFFFFF)
-gpu.setBackground(0x0000FF)
+gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
 
-gpu.setBackground(0x0000FF)
+gpu.setBackground(0x808080)
 gpu.setForeground(0xFFFFFF)
 gpu.set(34, 12, "OpenPenguin")
 
