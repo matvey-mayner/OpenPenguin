@@ -1,4 +1,5 @@
 local gpu = component.gpu
+local component = require("component")
 
 local function MakeButton(x, y, width, height, text, foreground, background)
   gpu.setForeground(foreground)
