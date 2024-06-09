@@ -1,7 +1,7 @@
 local component = require("component")
 local event = require("event")
 local filesystem = require("filesystem")
-local gpu = component.gpu
+local GUI = require("GUIE")
 local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
@@ -17,17 +17,6 @@ local function message(str)
   gpu.setBackground(0x808080)
   gpu.fill(1, 1, 80, 25, " ")
   gpu.set(1, 1, str)
-end
-
--- ДАУНЫ ГОНИТЕ КНОПКУ
-
-local function drawButton(x, y, width, height, text, foreground, background)
-  gpu.setForeground(foreground)
-  gpu.setBackground(background)
-  gpu.fill(x, y, width, height, " ")
-  local textX = x + math.floor((width - #text) / 2)
-  local textY = y + math.floor(height / 2)
-  gpu.set(textX, textY, text)
 end
 
 -- КоМАнДиКи ГрУзИтЕсЬ
@@ -88,14 +77,14 @@ gpu.setForeground(0xFFFFFF)
 gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
 
-drawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
-drawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
-drawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
-drawButton(55, 2, 12, 3, "Exit To OpenOS", 0xFFFFFF, 0x555555)
-drawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
-drawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
-drawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
-drawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
+MakeButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
+MakeButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
+MakeButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
+MakeButton(55, 2, 12, 3, "Exit To OpenOS", 0xFFFFFF, 0x555555)
+MakeButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
+MakeButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
+MakeButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
+MakeButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
 
 -- Ожидаем нажатия кнопки
 while true do
