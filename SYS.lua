@@ -1,5 +1,6 @@
 local component = require("component")
 local event = require("event")
+local filesystem = require("filesystem")
 local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
