@@ -120,3 +120,21 @@ gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
 gpu.fill(1, 23, 80, 2, " ")
 gpu.set(34, 24, "OpenPenguin")
+
+  elseif y == 24 and x >= 1 and x <= 9 then
+    -- Обработка команд для нижней полоски
+    message("Choose an option:\n1. Create Folder\n2. Create File\n3. Rename Item\n4. Edit File")
+    local _, _, _, _, _, option = event.pull("key_down")
+    if option == 2 then
+      createFolder()
+    elseif option == 3 then
+      createFile()
+    elseif option == 4 then
+      renameItem()
+    elseif option == 5 then
+      editFile()
+    end
+  elseif y == 24 and x >= 69 and x <= 80 then
+    openCommandLine()
+  end
+end
