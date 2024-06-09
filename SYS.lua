@@ -110,8 +110,12 @@ while true do
       shell.execute("Snake.lua")
     elseif x >= 38 and x <= 49 then
       shell.execute("files.lua")
-    end
-  
+      else
+    message("Invalid command.")
+    os.sleep(2)
+  end
+end
+
 gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
 gpu.fill(1, 23, 80, 2, " ")
