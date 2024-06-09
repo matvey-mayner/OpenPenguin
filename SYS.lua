@@ -121,3 +121,8 @@ while true do
     elseif x >= 38 and x <= 49 then
       shell.execute("files.lua")
     end
+  
+gpu.setBackground(0xFFFFFF)
+gpu.setForeground(0x000000)
+gpu.fill(1, 23, 80, 2, " ")
+gpu.set(34, 24, "OpenPenguin")
