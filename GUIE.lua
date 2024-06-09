@@ -1,5 +1,6 @@
 local module = {}
 
+local component = require("component")
 local gpu = component.gpu
 local event = require("event")
 
