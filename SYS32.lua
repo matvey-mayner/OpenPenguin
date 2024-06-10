@@ -30,7 +30,7 @@ local hotkeys = {
 -- Устанавливаем разрешение экрана
 gpu.setResolution(80, 25)
 
-local function DrawButton(x, y, width, height, text, callback, foreground, background)
+local function DrawButton(x, y, width, height, text, foreground, background)
   gpu.setForeground(foreground)
   gpu.setBackground(background)
   gpu.fill(x, y, width, height, " ")
