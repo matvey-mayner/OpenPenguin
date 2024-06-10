@@ -99,8 +99,8 @@ local function runSnake()
   shell.execute("Snake.lua")
 end
 
-gpu.setForeground(0xFFFFFF)
-gpu.setBackground(0x0000FF)
+gpu.setForeground(0x000000)
+gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
 
 DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
