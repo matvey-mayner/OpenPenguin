@@ -6,21 +6,39 @@ local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
 
--- Видюха КРУТИСЬ!!!
+local buttonW = 20
+local buttonH = 1
+local keysConvertTable = {
+    rcontrol = "ctrl",
+    lcontrol = "ctrl",
+}
+local hotkeys = {
+    ["delete"] = {
+        action = {"DELETE"},
+    },
+    ["ctrl"] = {
+        ["e"] = {
+            action = {"EDIT"},
+            ["delete"] = {
+                action = {"DELETE","EDIT"},
+            }
+        }
+    }
+}
+
+-- ВИДЮХА!!! паси свиней)))
 
 gpu.setResolution(80,25)
 
--- СООБЩЕНИЯ СООБЩЕСТВА
-
+-- Функция для вывода КАКОВАТА ГАДА
 local function message(str)
   gpu.setForeground(0xFFFFFF)
-  gpu.setBackground(0x808080)
+  gpu.setBackground(0x000000)
   gpu.fill(1, 1, 80, 25, " ")
   gpu.set(1, 1, str)
 end
 
--- КоМАнДиКи ГрУзИтЕсЬ
-
+-- ФуНкЦиЯ ДлЯ ПоСеДеЛоК
 local function handleCommand(command)
   if command == "1" then
     message("Shutting down...")
@@ -33,10 +51,10 @@ local function handleCommand(command)
   elseif command == "3" then
     message("Random number: " .. tostring(math.random(1, 100)))
   elseif command == "4" then
-      shell.execute("/init.lua")
-    end
+   shell.execute("print "OpenPenguin maded by matveymayner and DanXvoIsMe"")
   elseif command == "5" then
-      shell.execute("Info.lua")
+   -- error for exit to ТаК НаЗЫВАЕМЫЙ ДОССС С ЧЁРНО. Ой не туда пошло
+    DOSSS
   elseif command == "6" then
     message("Are you sure you want to shutdown the computer? (y/n)")
     while true do
@@ -65,26 +83,38 @@ local function handleCommand(command)
   end
 end
 
+-- Функция для запуска игры Flappy Bird
 local function runFlappyBird()
       shell.execute("flappybird.lua")
 end
 
+-- Функция для запуска игры Snake
 local function runSnake()
       shell.execute("Snake.lua")
 end
 
+-- Очищаем экран
 gpu.setForeground(0xFFFFFF)
-gpu.setBackground(0x808080)
+gpu.setBackground(0x0000FF)
 gpu.fill(1, 1, 80, 25, " ")
 
 MakeButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
 MakeButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
 MakeButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
-MakeButton(55, 2, 12, 3, "Exit To OpenOS", 0xFFFFFF, 0x555555)
+MakeButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555)
 MakeButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
+
 MakeButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
 MakeButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
+
 MakeButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
+
+MakeButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
+
+gpu.setBackground(0xFFFFFF)
+gpu.setForeground(0x000000)
+gpu.fill(1, 23, 80, 2, " ")
+gpu.set(34, 24, "OpenPenguin")
 
 -- Ожидаем нажатия кнопки
 while true do
@@ -103,24 +133,16 @@ while true do
       handleCommand("5")
     end
   elseif y == 5 then
-    -- Обработка команд для второго ряда кнопок
     if x >= 10 and x <= 21 then
       shell.execute("flappybird.lua")
     elseif x >= 24 and x <= 35 then
       shell.execute("Snake.lua")
     elseif x >= 38 and x <= 49 then
-      shell.execute("files.lua")
-      else
-    message("Invalid command.")
-    os.sleep(2)
-  end
-end
-
-gpu.setBackground(0xFFFFFF)
-gpu.setForeground(0x000000)
-gpu.fill(1, 23, 80, 2, " ")
-gpu.set(34, 24, "OpenPenguin")
-
+      shell.execute("fileman.lua")
+     elseif x >= 55 and x <= 66 then
+      -- Запустить AppЖоп
+      shell.execute("AppShop.lua")
+    end
   elseif y == 24 and x >= 1 and x <= 9 then
     -- Обработка команд для нижней полоски
     message("Choose an option:\n1. Create Folder\n2. Create File\n3. Rename Item\n4. Edit File")
