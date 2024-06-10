@@ -38,4 +38,4 @@ gpu.set(34, 12, "OpenPenguin")
 
 drawLoadingBar()
 
-dofile("SYS.lua")
+dofile("SYS32.lua")
