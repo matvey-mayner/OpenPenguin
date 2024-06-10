@@ -62,11 +62,11 @@ local function handleCommand(command)
     message("Random number: " .. tostring(math.random(1, 100)))
   elseif command == "4" then
    shell.execute("cls")
-    print "OpenPenguin maded by matveymayner and DanXvoIsMe"
+   break
   elseif command == "5" then
    -- error for exit to ТаК НаЗЫВАЕМЫЙ ДОССС С ЧЁРНО. Ой не туда пошло
    shell.execute("cls")
-    return
+    print "OpenPenguin maded by matveymayner and DanXvoIsMe"
   elseif command == "6" then
     message("Are you sure you want to shutdown the computer? (y/n)")
     while true do
