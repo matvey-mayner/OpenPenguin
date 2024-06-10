@@ -636,5 +636,5 @@ end
 SetColor(NormalCl)
 term.setCursor(1, hScr)
 term.clear()
-shell.execute("cd //")
+shell.execute("cd /")
 dofile("SYS32.lua")
