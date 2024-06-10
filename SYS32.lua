@@ -2,6 +2,7 @@ local component = require("component")
 local event = require("event")
 local filesystem = require("filesystem")
 local GUI = require("GUIE")
+local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
@@ -51,10 +52,12 @@ local function handleCommand(command)
   elseif command == "3" then
     message("Random number: " .. tostring(math.random(1, 100)))
   elseif command == "4" then
-   shell.execute("print "OpenPenguin maded by matveymayner and DanXvoIsMe"")
+   shell.execute("cls")
+    print "OpenPenguin maded by matveymayner and DanXvoIsMe"
   elseif command == "5" then
    -- error for exit to ТаК НаЗЫВАЕМЫЙ ДОССС С ЧЁРНО. Ой не туда пошло
-    DOSSS
+   shell.execute("cls")
+    return
   elseif command == "6" then
     message("Are you sure you want to shutdown the computer? (y/n)")
     while true do
