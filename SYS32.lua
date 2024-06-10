@@ -123,8 +123,10 @@ DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
 
 DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
 
-
-
+gpu.setBackground(0xFFFFFF)
+gpu.setForeground(0x000000)
+gpu.fill(1, 23, 80, 2, " ")
+gpu.set(34, 24, "OpenPenguin")
 
 -- ОЖИДАЕМ НАЖАТИЯ КОЖЕНОГО
 while true do
