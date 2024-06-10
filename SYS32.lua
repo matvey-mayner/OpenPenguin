@@ -142,6 +142,7 @@ while true do
   elseif isWithinButton(x, y, 38, 5, 12, 3) then
     shell.execute("fileman.lua")
   elseif isWithinButton(x, y, 55, 5, 12, 3) then
+    shell.execute("cls")
     shell.execute("AppShop.lua")
   end
 end
