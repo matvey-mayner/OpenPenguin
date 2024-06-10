@@ -31,7 +31,7 @@ local hotkeys = {
 
 gpu.setResolution(80,25)
 
-local function drawButton(x, y, width, height, text, foreground, background)
+local function MakeButton(x, y, width, height, text, foreground, background)
   gpu.setForeground(foreground)
   gpu.setBackground(background)
   gpu.fill(x, y, width, height, " ")
