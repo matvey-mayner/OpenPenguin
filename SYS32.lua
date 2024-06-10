@@ -115,7 +115,7 @@ MakeButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
 -- ВЫРИСОВУЕМ ЧТО БЫ ТЫ ЗНАЛ ЧЕМ ТЫ ПОЛЬЗУЕШЬСЯ А ТО ТОГО ГОВНА В НАЧАЛЕ НЕ ХВАТАЕТ А КОМЕНТ ЧТОБЫ ПАХАЛО ВСЁ
 gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
-gpu.fill(1, 23, 80, 2, " ")
+gpu.fill(1, 23, 80, 2, "ㅤ")
 gpu.set(34, 24, "OpenPenguin") -- ЭТОТ ДЛЯ ТОГО ЧТО БЫЛО РАНЕЕЕ
 
 
