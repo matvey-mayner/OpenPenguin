@@ -6,7 +6,7 @@ os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/AppShop/main
 print "Done!"
 -- Функция для вывода строки команд
 local function printCommands()
-  print("1. Woker Installer (Virus)  2. MineOS  3. Pong")
+  print("1. Woker Installer (Virus)  2. MineOS  3. Pong  4.Exit")
 end
  
 -- Функция для обработки команд
@@ -17,6 +17,8 @@ local function handleCommand(command)
     os.execute("pastebin get vhg5uu1b MineOS Installer.lua")
   elseif command == "3" then
     os.execute("pastebin get gGHCE9MK Pong.lua")
+  elseif command == "4" then
+    return
   else
     message("Invalid command.")
   end
