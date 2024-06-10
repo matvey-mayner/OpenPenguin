@@ -62,7 +62,7 @@ local function handleCommand(command)
     message("Random number: " .. tostring(math.random(1, 100)))
   elseif command == "4" then
    shell.execute("cls")
-   break
+   os.exit()
   elseif command == "5" then
    -- error for exit to ТаК НаЗЫВАЕМЫЙ ДОССС С ЧЁРНО. Ой не туда пошло
    shell.execute("cls")
