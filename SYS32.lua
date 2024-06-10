@@ -31,7 +31,7 @@ local hotkeys = {
 
 gpu.setResolution(80,25)
 
-local function MakeButton(x, y, width, height, text, foreground, background)
+local function DrawButton(x, y, width, height, text, foreground, background)
   gpu.setForeground(foreground)
   gpu.setBackground(background)
   gpu.fill(x, y, width, height, " ")
@@ -110,18 +110,18 @@ gpu.setForeground(0xFFFFFF)
 gpu.setBackground(0x0000FF)
 gpu.fill(1, 1, 80, 25, " ")
 
-MakeButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
-MakeButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
-MakeButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
-MakeButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555)
-MakeButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
+DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
+DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
+DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
+DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555)
+DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
 
-MakeButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
-MakeButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
+DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
+DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
 
-MakeButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
+DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
 
-MakeButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
+DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
 
 
 
