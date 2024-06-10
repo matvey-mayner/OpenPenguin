@@ -7,6 +7,9 @@ local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
 
+os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/SYS32.lua")
+shell.execute("cls")
+
 local buttonW = 20
 local buttonH = 1
 local keysConvertTable = {
