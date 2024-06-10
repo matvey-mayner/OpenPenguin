@@ -2,7 +2,6 @@ local component = require("component")
 local event = require("event")
 local gpu = component.gpu
 
-os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/autorun.lua")
 os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/SYS32.lua")
 shell.execute("cls")
 
