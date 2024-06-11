@@ -2,6 +2,7 @@ local component = require("component")
 local event = require("event")
 local filesystem = require("filesystem")
 local GUI = require("GUIE")
+local ECS = require("ECSAPI")
 local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
