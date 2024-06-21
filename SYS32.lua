@@ -3,6 +3,8 @@ local event = require("event")
 local filesystem = require("filesystem")
 local GUI = require("GUIE")
 local ECS = require("ECSAPI")
+local image = require("image")
+local oboi = image.load("IconsPic/oboi.pic")
 local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
@@ -103,6 +105,7 @@ end
 gpu.setForeground(0x000000)
 gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
+image.draw(1, 1, oboi)
 
 DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
 DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
@@ -147,3 +150,5 @@ while true do
     shell.execute("AppShop.lua")
   end
 end
+
+ 
