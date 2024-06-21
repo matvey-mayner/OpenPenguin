@@ -1,3 +1,5 @@
+-- Стырил эту годноту из HIPOSAV это просто рил топ прога
+
 local image = require("image")
 local ecs = require("ECSAPI")
 local c = require("component")
@@ -24,10 +26,10 @@ local topButtons = {"О системе", "Диски"}
 local spaceBetweenTopButtons, offsetTopButtons = 2, 2
 local currentMode = 1
 
-local osIcon = image.load("/HIPOSAV/IconsPic/oslogoup.pic")
-local hddIcon = image.load("/HIPOSAV/IconsPic/HDD.pic")
-local floppyIcon = image.load("/HIPOSAV/IconsPic/Floppy.pic")
-local updateIcon = image.load("/HIPOSAV/IconsPic/Update.pic")
+-- здесь могла быть ваша реклама(
+local hddIcon = image.load("/IconsPic/HDD.pic")
+local floppyIcon = image.load("/IconsPic/Floppy.pic")
+local updateIcon = image.load("/IconsPic/Update.pic")
 
 local x, y = "auto", "auto"
 local width, height = 68, 22
@@ -98,7 +100,7 @@ local selectSymbol, nonSelectSymbol = "✔", "  "
 local limit = 40
 local xPos, yPos = xUpdatesList, yUpdatesList
 
---ОЧИЩАЕМ ЭТУ ПИЗДУ, ЗАЕБАЛО, БЛЯДЬ
+--ОЧИЩАЕМ ЭТУ ГОВНОТУ
 ecs.square(xPos, yPos, limit + 2, 15, colors.main)
 
 for i = drawUpdatesFrom, (drawUpdatesFrom + 4) do
@@ -128,15 +130,13 @@ ecs.square(x, y + heightOfTopBar, width, height - heightOfTopBar, colors.main)
 local xPos, yPos
 if currentMode == 1 then
 xPos, yPos = x + 1, y + heightOfTopBar + 1
-image.draw(xPos, yPos, osIcon)
-xPos, yPos = x + 1, yPos + 5
-ecs.colorTextWithBack(xPos, yPos, 0x000000, colors.main, "HIPOS (Android Version)"); yPos = yPos + 1
-ecs.colorText(xPos, yPos, ecs.colors.lightGray, "Версия 2.0"); yPos = yPos + 2
+ecs.colorTextWithBack(xPos, yPos, 0x000000, colors.main, "OpenPenguin"); yPos = yPos + 1
+ecs.colorText(xPos, yPos, ecs.colors.lightGray, "Версия 1.2"); yPos = yPos + 2
 
-ecs.smartText(xPos, yPos, "§fСистемный блок §8(Офисный)"); yPos = yPos + 1
+ecs.smartText(xPos, yPos, "§fСистемный блок §8(Нормальный)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fПроцессор §8(Для серьезных задач)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fПамять §8(DDR5 с охлаждением "..ram.total.." KB)"); yPos = yPos + 1
-ecs.smartText(xPos, yPos, "§fГрафика §8(Не для игр)"); yPos = yPos + 1
+ecs.smartText(xPos, yPos, "§fГрафика §8(Для работ и игр)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fСерийный номер §8"..ecs.stringLimit("end", computer.address(), 30)); yPos = yPos + 1
 	
 elseif currentMode == 2 then
