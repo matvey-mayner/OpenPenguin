@@ -30,9 +30,9 @@ local computerIcon, robotIcon, tabletIcon
 if not component.isAvailable("robot") then
 	image = require("image")
 	ecs = require("ECSAPI")
-	computerIcon = image.load("HIPOSAV/IconsPic/folder.pic")
-	robotIcon = image.load("HIPOSAV/IconsPic/folder.pic")
-	tabletIcon = image.load("HIPOSAV/IconsPic/folder.pic")
+	computerIcon = image.load("IconsPic/HDD.pic")
+	robotIcon = image.load("IconsPic/HDD.pic")
+	tabletIcon = image.load("IconsPic/HDD.pic")
 end
 
 ----------------------------------------------------------------------------------------------------------------------------------
