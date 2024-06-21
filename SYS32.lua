@@ -95,11 +95,11 @@ local function handleCommand(command)
 end
 
 local function runFlappyBird()
-  shell.execute("flappybird.lua")
+  shell.execute("Apps/flappybird.lua")
 end
 
 local function runSnake()
-  shell.execute("Snake.lua")
+  shell.execute("Apps/Snake.lua")
 end
 
 gpu.setForeground(0x000000)
@@ -117,6 +117,7 @@ DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
 DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
 DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
 DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
+DrawButton(69, 5, 12, 3, "Settings", 0xFFFFF, 0x555555)
 
 gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
@@ -140,14 +141,16 @@ while true do
   elseif isWithinButton(x, y, 69, 2, 12, 3) then
     handleCommand("5")
   elseif isWithinButton(x, y, 10, 5, 12, 3) then
-    shell.execute("flappybird.lua")
+    shell.execute("Apps/flappybird.lua")
   elseif isWithinButton(x, y, 24, 5, 12, 3) then
-    shell.execute("Snake.lua")
+    shell.execute("Apps/Snake.lua")
   elseif isWithinButton(x, y, 38, 5, 12, 3) then
     shell.execute("fileman.lua")
   elseif isWithinButton(x, y, 55, 5, 12, 3) then
     shell.execute("cls")
     shell.execute("AppShop.lua")
+  elseif iwWithinButton(x, y, 69, 5, 12, 3) then
+        shell.execute("Apps/Control.lua")
   end
 end
 
