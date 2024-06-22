@@ -158,7 +158,7 @@ while true do
     shell.execute("cls")
     shell.execute("AppShop.lua")
   elseif isWithinButton(x, y, 69, 5, 12, 3) then
-    handleCommand("Settings")
+    handleCommand("runSettings()")
   end
 end
 
