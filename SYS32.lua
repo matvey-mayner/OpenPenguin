@@ -88,6 +88,10 @@ local function handleCommand(command)
     message("Starting Snake...")
     os.sleep(2)
     runSnake()
+  elseif command == "Control" then
+    message("Starting Settings...")
+    os.sleep(2)
+    runSettings()
   else
     message("Invalid command.")
     os.sleep(2)
@@ -100,6 +104,10 @@ end
 
 local function runSnake()
   shell.execute("bin/Snake.lua")
+end
+
+local function runSettings()
+  shell.execute("bin/Control.lua")
 end
 
 gpu.setForeground(0x000000)
