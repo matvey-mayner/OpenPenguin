@@ -4,7 +4,7 @@ local filesystem = require("filesystem")
 local GUI = require("GUIE")
 local ECS = require("ECSAPI")
 local image = require("image")
-local oboi = image.load("IconsPic/oboi.pic")
+local oboi = image.load("bin/oboi.pic")
 local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
@@ -95,11 +95,11 @@ local function handleCommand(command)
 end
 
 local function runFlappyBird()
-  shell.execute("Apps/flappybird.lua")
+  shell.execute("bin/flappybird.lua")
 end
 
 local function runSnake()
-  shell.execute("Apps/Snake.lua")
+  shell.execute("bin/Snake.lua")
 end
 
 gpu.setForeground(0x000000)
@@ -150,7 +150,7 @@ while true do
     shell.execute("cls")
     shell.execute("AppShop.lua")
   elseif iwWithinButton(x, y, 69, 5, 12, 3) then
-        shell.execute("Apps/Control.lua")
+        shell.execute("bin/Control.lua")
   end
 end
 
