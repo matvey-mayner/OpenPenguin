@@ -195,8 +195,6 @@ local function motd()
   end
 end
 
-_G._OSLANGUAGE = require("System/OS/Language")
-
 while true do
   local component = require("component")
   component.gpu.setBackground(backgroundColor)
