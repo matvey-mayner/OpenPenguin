@@ -158,7 +158,7 @@ while true do
     shell.execute("cls")
     shell.execute("AppShop.lua")
   elseif iwWithinButton(x, y, 69, 5, 12, 3) then
-        shell.execute("bin/Control.lua")
+    shell.execute("bin/Control.lua")
   end
 end
 
