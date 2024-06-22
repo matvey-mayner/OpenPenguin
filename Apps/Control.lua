@@ -100,7 +100,7 @@ local selectSymbol, nonSelectSymbol = "✔", "  "
 local limit = 40
 local xPos, yPos = xUpdatesList, yUpdatesList
 
---ОЧИЩАЕМ ЭТУ ПИЗДУ, ЗАЕБАЛО, БЛЯДЬ
+--ОЧИЩАЕМ ЭТУ GOVNOTY
 ecs.square(xPos, yPos, limit + 2, 15, colors.main)
 
 for i = drawUpdatesFrom, (drawUpdatesFrom + 4) do
@@ -198,7 +198,6 @@ if action == "Форматировать" then
 local data = ecs.universalWindow("auto", "auto", 38, ecs.windowColors.background, true, {"EmptyLine"}, {"CenterText", 0x880000, "Внимание!"}, {"EmptyLine"}, {"CenterText", 0x262626, "Данное действие очистит весь диск."}, {"CenterText", 0x262626, "Продолжить?"}, {"EmptyLine"}, {"Button", {0xbbbbbb, 0xffffff, "Да"}, {0x999999, 0xffffff, "Нет"}})
 if data[1] ~= "Нет" then
 ecs.formatHDD(HDDs[key].address)
-os.execute("shutdown")
 drawMain()
 end
 elseif action == "Изменить имя" then
