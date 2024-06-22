@@ -107,7 +107,7 @@ local function runSnake()
 end
 
 local function runSettings()
-  shell.execute("Control.lua")
+  shell.execute("bin/Control.lua")
 end
 
 gpu.setForeground(0x000000)
