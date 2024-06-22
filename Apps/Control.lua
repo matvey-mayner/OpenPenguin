@@ -27,9 +27,9 @@ local spaceBetweenTopButtons, offsetTopButtons = 2, 2
 local currentMode = 1
 
 -- здесь могла быть ваша реклама(
-local hddIcon = image.load("/IconsPic/HDD.pic")
-local floppyIcon = image.load("/IconsPic/Floppy.pic")
-local updateIcon = image.load("/IconsPic/Update.pic")
+local hddIcon = image.load("/bin/HDD.pic")
+local floppyIcon = image.load("/bin/Floppy.pic")
+local updateIcon = image.load("/bin/Update.pic")
 
 local x, y = "auto", "auto"
 local width, height = 68, 22
