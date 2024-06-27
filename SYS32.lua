@@ -33,7 +33,7 @@ local hotkeys = {
 -- Устанавливаем разрешение экрана
 gpu.setResolution(80, 25)
 
-pcall(proxy.setLabel, "OpenPenguin")
+--pcall(proxy.setLabel, "OpenPenguin")
 
 local function DrawButton(x, y, width, height, text, foreground, background)
   gpu.setForeground(foreground)
