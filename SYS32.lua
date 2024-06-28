@@ -152,11 +152,11 @@ local function isWithinButton(x, y, bx, by, bw, bh)
   return x >= bx and x < bx + bw and y >= by and y < by + bh
 end
 
-while true do
-  local _, _, x, y = event.pull("touch")
-  if isWithinButton(x, y, 10, 2, 12, 3) then
+ DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("1")
-  elseif isWithinButton(x, y, 24, 2, 12, 3) then
+ end)
+
+DrawButton(24, 3, 10, 1, "Hello", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("2")
   elseif isWithinButton(x, y, 38, 2, 15, 3) then
     handleCommand("3")
