@@ -143,7 +143,7 @@ DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555, function()
     shell.execute("AppShop.lua")
 end)
 
-DrawButton(69, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555, function()
+DrawButton(69, 5, 12, 3, "Settings", 0xFFFFFF, 0x555555, function()
     shell.execute("bin/Control.lua")
 end)
 
