@@ -131,17 +131,17 @@ gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
 --image.draw(0, 0, oboii)
 
-DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
-DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
-DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
-DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555)
-DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
+--DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555)
+--DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555)
+--DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555)
+--DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555)
+--DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555)
 
-DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
-DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
-DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
-DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
-DrawButton(69, 5, 12, 3, "Settings", 0xFFFFFF, 0x555555)
+--DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555)
+--DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555)
+--DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555)
+--DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555)
+--DrawButton(69, 5, 12, 3, "Settings", 0xFFFFFF, 0x555555)
 
 gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
@@ -156,25 +156,39 @@ end
     handleCommand("1")
  end)
 
-DrawButton(24, 3, 10, 1, "Hello", 0xFFFFFF, 0xFF00FF, function()
+DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("2")
-  elseif isWithinButton(x, y, 38, 2, 15, 3) then
+end)
+
+DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("3")
-  elseif isWithinButton(x, y, 55, 2, 12, 3) then
+end)
+
+DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("4")
-  elseif isWithinButton(x, y, 69, 2, 12, 3) then
+end)
+
+DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0xFF00FF, function()
     handleCommand("5")
-  elseif isWithinButton(x, y, 10, 5, 12, 3) then
+end)
+
+DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0xFF00FF, function()
     shell.execute("bin/flappybird.lua")
-  elseif isWithinButton(x, y, 24, 5, 12, 3) then
+end)
+
+DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0xFF00FF, function()
     shell.execute("bin/Snake.lua")
-  elseif isWithinButton(x, y, 38, 5, 12, 3) then
+end)
+
+DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0xFF00FF, function()
     shell.execute("fileman.lua")
-  elseif isWithinButton(x, y, 55, 5, 12, 3) then
+end)
+
+DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0xFF00FF, function()
     shell.execute("cls")
     shell.execute("AppShop.lua")
-  elseif isWithinButton(x, y, 69, 5, 12, 3) then
-    shell.execute("bin/Control.lua")
-  end
-end
+end)
 
+DrawButton(69, 5, 12, 3, "AppShop", 0xFFFFFF, 0xFF00FF, function()
+    shell.execute("bin/Control.lua")
+end)
