@@ -1,9 +1,8 @@
-
 ---------------------------------------- OpenComputers Image Format (OCIF) -----------------------------------------------------------
 
 --[[
 	
-	Автор: Pornogion
+	Автор: P#$%#@#
 		VK: https://vk.com/id88323331
 	Соавтор: IT
 		VK: https://vk.com/id7799889
@@ -23,7 +22,10 @@
 			использовать именно его.
 
 	Функции для работы с изображением:
-
+		
+		image.transform(table картинка, int масштаб по ширине, int масштаб по высоте): table картинка
+			Изменяет размер картинки по методу интерполяции по соседним пикселям.
+			
 		image.expand(table картинка, string направление, int количество пикселей[, int цвет фона, int цвет текста, int прозрачность, char символ]): table картинка
 			Расширяет указанную картинку в указанном направлении (fromRight, fromLeft, fromTop, fromBottom),
 			создавая при этом пустые белые пиксели. Если указаны опциональные аргументы, то вместо пустых
@@ -75,22 +77,11 @@
 
 --------------------------------------- Подгрузка библиотек --------------------------------------------------------------
 
--- Адаптивная загрузка необходимых библиотек и компонентов
-local libraries = {
-	["component"] = "component",
-	["unicode"] = "unicode",
-	["fs"] = "filesystem",
-	["colorlib"] = "colorlib",
-	["bit"] = "bit32",
-}
-
-local components = {
-	["gpu"] = "gpu",
-}
-
-for library in pairs(libraries) do if not _G[library] then _G[library] = require(libraries[library]) end end
-for comp in pairs(components) do if not _G[comp] then _G[comp] = _G.component[components[comp]] end end
-libraries, components = nil, nil
+local component = require("component")
+local unicode = require("unicode")
+local fs = require("filesystem")
+local colorlib = require("colorlib")
+local bit32 = require("bit32")
 
 local image = {}
 
@@ -99,12 +90,6 @@ local image = {}
 --Константы программы
 local constants = {
 	OCIFSignature = "OCIF",
-	encodingMethods = {
-		raw = 0,
-		OCIF1 = 1,
-		OCIF2 = 2,
-		OCIF3 = 3,
-	},
 	OCIF2Elements = {
 		alphaStart = "A",
 		symbolStart = "S",
@@ -116,7 +101,6 @@ local constants = {
 	nullChar = 0,
 	rawImageLoadStep = 19,
 	compressedFileFormat = ".pic",
-	rawFileFormat = ".rawpic",
 	pngFileFormat = ".png",
 }
 
@@ -678,51 +662,66 @@ function image.convertToGroupedImage(picture)
 end
 
 --Нарисовать по указанным координатам картинку указанной ширины и высоты для теста
-function image.createImage(width, height, random)
-	local picture = {}
-	local symbolArray = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "И", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"}
-	picture.width = width
-	picture.height = height
-	local background, foreground, symbol
-	for j = 1, height do
-		for i = 1, width do
-			if random then
-				background = math.random(0x000000, 0xffffff)
-				foreground = math.random(0x000000, 0xffffff)
-				symbol = symbolArray[math.random(1, #symbolArray)]
-			else
-				background = 0x880000
-				foreground = 0xffffff
-				symbol = "Q"
-			end
-
-			table.insert(picture, background)
-			table.insert(picture, foreground)
-			table.insert(picture, 0x00)
-			table.insert(picture, symbol)
+function image.create(width, height, background, foreground, alpha, symbol, random)
+	background, foreground, alpha, symbol = background or 0x0, foreground or 0x0, alpha or 0x0, symbol or " "
+	local picture, symbolArray = {width = width, height = height}, {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z", "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "А", "Б", "В", "Г", "Д", "Е", "Ж", "З", "И", "Й", "К", "Л", "И", "Н", "О", "П", "Р", "С", "Т", "У", "Ф", "Х", "Ц", "Ч", "Ш", "Щ", "Ъ", "Ы", "Ь", "Э", "Ю", "Я"}
+	for i = 1, picture.width * picture.height do
+		if random then
+			background = math.random(0x000000, 0xffffff)
+			foreground = math.random(0x000000, 0xffffff)
+			symbol = symbolArray[math.random(1, #symbolArray)]
 		end
+		table.insert(picture, background)
+		table.insert(picture, foreground)
+		table.insert(picture, alpha)
+		table.insert(picture, symbol)
 	end
-	-- image.draw(x, y, picture)
 	return picture
 end
 
--- Функция оптимизации цвета текста у картинки, уменьшает число GPU-операций при отрисовке
+-- Функция оптимизации цвета текста и символов у картинки, уменьшает число GPU-операций при отрисовке из буфера
 -- Вызывается только при сохранении файла, так что на быстродействии не сказывается,
 -- а в целом штука очень и очень полезная. Фиксит криворукость художников.
-function image.optimize(picture, showOptimizationProcess)
-	local currentForeground = 0x000000
-	local optimizationCounter = 0
+function image.optimize(picture)
+	local i1, i2, i3 = 0, 0, 0
 	for i = 1, #picture, constants.elementCount do
-		if picture[i + 3] == " " and picture[i + 1] ~= currentForeground then		
-			picture[i + 1] = currentForeground
-			if showOptimizationProcess then picture[i + 3] = "#" end
-			optimizationCounter = optimizationCounter + 1
-		else
-			currentForeground = picture[i + 1]
+		--Уменьшаем нагрузку на ЦОПЕ
+		i1, i2, i3 = i + 1, i + 2, i + 3
+		--Если цвет фона равен цвету текста, и используется псевдографические полупиксели
+		if picture[i] == picture[i1] and (picture[i3] == "▄" or picture[i3] == "▀") then
+			picture[i3] = " "
+		end
+		--Если символ равен пролбелу, т.е. цвет текста не учитывается
+		if picture[i3] == " " then		
+			picture[i1] = 0x000000
 		end
 	end
-	if showOptimizationProcess then ecs.error("Count of optimized pixels: " .. optimizationCounter) end
+
 	return picture
+end
+
+--Получить пиксель из изображения по указанным координатам
+function image.get(picture, x, y)
+	if x >= 1 and y >= 1 and x <= picture.width and y <= picture.height then
+		local index = convertCoordsToIndex(x, y, picture.width)
+		return picture[index], picture[index + 1], picture[index + 2], picture[index + 3] 
+	else
+		return nil
+	end
+end
+
+--Установить пиксель в изображении по указанным координатам
+function image.set(picture, x, y, background, foreground, alpha, symbol, debug)
+	if x >= 1 and y >= 1 and x <= picture.width and y <= picture.height then
+		local index = convertCoordsToIndex(x, y, picture.width)
+		picture[index] = background or 0xFF00FF
+		picture[index + 1] = foreground or 0xFF00FF
+		picture[index + 2] = alpha or 0x00
+		picture[index + 3] = symbol or " "
+		return picture
+	else
+		error("Can't set pixel because it's located out of image coordinates: x = " .. x .. ", y = " .. y)
+	end
 end
 
 ------------------------------------------ Функция снятия скриншота с экрана ------------------------------------------------
@@ -731,11 +730,11 @@ end
 function image.screenshot(path)
 	local picture = {}
 	local foreground, background, symbol
-	picture.width, picture.height = gpu.getResolution()
+	picture.width, picture.height = component.gpu.getResolution()
 	
 	for j = 1, picture.height do
 		for i = 1, picture.width do
-			symbol, foreground, background = gpu.get(i, j)
+			symbol, foreground, background = component.gpu.get(i, j)
 			table.insert(picture, background)
 			table.insert(picture, foreground)
 			table.insert(picture, 0x00)
@@ -746,71 +745,161 @@ function image.screenshot(path)
 	image.save(path, picture)
 end
 
------------------------------------------- Функции обработки изображения ------------------------------------------------
+------------------------------------------ Методы трансформирования изображения ------------------------------------------------
+
+--Вставка ряда пикселей
+function image.insertRow(picture, y, rowArray)
+	local index = convertCoordsToIndex(1, y, picture.width)
+	for i = 1, #rowArray, 4 do
+		table.insert(picture, index, rowArray[i + 3])
+		table.insert(picture, index, rowArray[i + 2])
+		table.insert(picture, index, rowArray[i + 1])
+		table.insert(picture, index, rowArray[i])
+		index = index + 4
+	end
+	picture.height = picture.height + 1
+	return picture
+end
+
+function image.insertColumn(picture, x, columnArray)
+	local index = convertCoordsToIndex(x, 1, picture.width)
+	for i = 1, #columnArray, 4 do
+		table.insert(picture, index, columnArray[i + 3])
+		table.insert(picture, index, columnArray[i + 2])
+		table.insert(picture, index, columnArray[i + 1])
+		table.insert(picture, index, columnArray[i])
+		index = index + picture.width * 4 + 4
+	end
+	picture.width = picture.width + 1
+	return picture
+end
+
+--Удаление ряда пикселей
+function image.removeRow(picture, y)
+	local index = convertCoordsToIndex(1, y, picture.width)
+	for i = 1, picture.width * 4 do table.remove(picture, index) end
+	picture.height = picture.height - 1
+	return picture
+end
+
+--Удаление колонки пикселей
+function image.removeColumn(picture, x)
+	local index = convertCoordsToIndex(x, 1, picture.width)
+	for i = 1, picture.height do
+		for j = 1, 4 do table.remove(picture, index) end
+		index = index + (picture.width) * 4 - 4
+	end
+	picture.width = picture.width - 1
+	return picture
+end
+
+--Получение ряда пикселей
+function image.getRow(picture, y)
+	local row, background, foreground, alpha, symbol = {width = picture.width, height = 1}
+	for x = 1, picture.width do
+		background, foreground, alpha, symbol = image.get(picture, x, y)
+		table.insert(row, background)
+		table.insert(row, foreground)
+		table.insert(row, alpha)
+		table.insert(row, symbol)
+	end
+	return row
+end
+
+--Получение колонки пикселей
+function image.getColumn(picture, x)
+	local column, background, foreground, alpha, symbol = {width = 1, height = picture.height}
+	for y = 1, picture.height do
+		background, foreground, alpha, symbol = image.get(picture, x, y)
+		table.insert(column, background)
+		table.insert(column, foreground)
+		table.insert(column, alpha)
+		table.insert(column, symbol)
+	end
+	return column
+end
+
+--Создание копии массива изображения
+function image.duplicate(picture)
+	local newPicture = {width = picture.width, height = picture.height}
+	for i = 1, #picture do newPicture[i] = picture[i] end
+	return newPicture
+end
+
+--Аналог свободного трансформирования из фотошопа
+function image.transform(picture, newWidth, newHeight)
+	local newPicture = image.duplicate(picture)
+	local widthScale, heightScale = newWidth / picture.width, newHeight / picture.height
+	local deltaWidth, deltaHeight = math.abs(newWidth - picture.width), math.abs(newHeight - picture.height)
+	local widthIteration, heightIteration = widthScale > 1 and newWidth / deltaWidth or picture.width / deltaWidth, heightScale > 1 and newHeight / deltaHeight or picture.height / deltaHeight
+
+	-- ecs.error(widthIteration, heightIteration, deltaWidth, picture.width, newWidth)
+
+	--Сжимаем шакалов по ширине
+	if widthScale > 1 then
+		local x = 1
+		while x <= newPicture.width do
+			if math.floor(x % widthIteration) == 0 then newPicture = image.insertColumn(newPicture, x, image.getColumn(newPicture, x - 1)) end
+			x = x + 1
+		end
+	elseif widthScale < 1 then
+		local x = 1
+		while x <= newPicture.width do
+			if math.floor(x % widthIteration) == 0 then newPicture = image.removeColumn(newPicture, x) end
+			x = x + 1
+		end
+	end
+
+	--И по высоте
+	if heightScale > 1 then
+		local y = 1
+		while y <= newPicture.height do
+			if math.floor(y % heightIteration) == 0 then newPicture = image.insertRow(newPicture, y, image.getRow(newPicture, y - 1)) end
+			y = y + 1
+		end
+	elseif heightScale < 1 then
+		local y = 1
+		while y <= newPicture.height do
+			if math.floor(y % heightIteration) == 0 then newPicture = image.removeRow(newPicture, y) end
+			y = y + 1
+		end
+	end
+
+	return newPicture
+end
 
 function image.expand(picture, mode, countOfPixels, background, foreground, alpha, symbol)
-	background = background or 0xffffff
-	foreground = foreground or 0x000000
-	alpha = alpha or 0x00
-	symbol = symbol or " "
+	local column = {}; for i = 1, picture.height do table.insert(column, background or 0xFFFFFF); table.insert(column, foreground or 0xFFFFFF); table.insert(column, alpha or 0x00); table.insert(column, symbol or " ") end
+	local row = {}; for i = 1, picture.height do table.insert(row, background or 0xFFFFFF); table.insert(row, foreground or 0xFFFFFF); table.insert(row, alpha or 0x00); table.insert(row, symbol or " ") end
+
 	if mode == "fromRight" then
-		for j = 1, countOfPixels do
-			for i = 1, picture.height do		
-				local index = convertCoordsToIndex(picture.width + j, i, picture.width + j)
-				table.insert(picture, index, symbol); table.insert(picture, index, alpha); table.insert(picture, index, foreground); table.insert(picture, index, background)
-			end
-		end
-		picture.width = picture.width + countOfPixels
+		for i = 1, countOfPixels do picture = image.insertColumn(picture, picture.width + 1, column) end
 	elseif mode == "fromLeft" then
-		for j = 1, countOfPixels do
-			for i = 1, picture.height do		
-				local index = convertCoordsToIndex(1, i, picture.width + j)
-				table.insert(picture, index, symbol); table.insert(picture, index, alpha); table.insert(picture, index, foreground); table.insert(picture, index, background)
-			end
-		end
-		picture.width = picture.width + countOfPixels
+		for i = 1, countOfPixels do picture = image.insertColumn(picture, 1, column) end
 	elseif mode == "fromTop" then
-		for i = 1, (countOfPixels * picture.width) do
-			table.insert(picture, 1, symbol); table.insert(picture, 1, alpha); table.insert(picture, 1, foreground); table.insert(picture, 1, background)
-		end
-		picture.height = picture.height + countOfPixels
+		for i = 1, countOfPixels do picture = image.insertRow(picture, 1, row) end
 	elseif mode == "fromBottom" then
-		for i = 1, (countOfPixels * picture.width) do
-			table.insert(picture, background); table.insert(picture, foreground); table.insert(picture, alpha); table.insert(picture, symbol)
-		end
-		picture.height = picture.height + countOfPixels
+		for i = 1, countOfPixels do picture = image.insertRow(picture, picture.height + 1, row) end
 	else
 		error("Wrong image expanding mode: only 'fromRight', 'fromLeft', 'fromTop' and 'fromBottom' are supported.")
 	end
+
 	return picture
 end
 
 function image.crop(picture, mode, countOfPixels)
 	if mode == "fromRight" then
-		for j = 1, countOfPixels do
-			for i = 1, picture.height do
-				local index = convertCoordsToIndex(picture.width + 1 - j, i, picture.width - j)
-				for a = 1, constants.elementCount do table.remove(picture, index) end
-			end
-		end
-		picture.width = picture.width - countOfPixels
+		for i = 1, countOfPixels do picture = image.removeColumn(picture, picture.width) end
 	elseif mode == "fromLeft" then
-		for j = 1, countOfPixels do
-			for i = 1, picture.height do
-				local index = convertCoordsToIndex(1, i, picture.width - j)
-				for a = 1, constants.elementCount do table.remove(picture, index) end
-			end
-		end
-		picture.width = picture.width - countOfPixels
+		for i = 1, countOfPixels do picture = image.removeColumn(picture, 1) end
 	elseif mode == "fromTop" then
-		for i = 1, (countOfPixels * constants.elementCount * picture.width) do table.remove(picture, 1) end
-		picture.height = picture.height - countOfPixels
+		for i = 1, countOfPixels do picture = image.removeRow(picture, 1) end
 	elseif mode == "fromBottom" then
-		for i = 1, (countOfPixels * constants.elementCount * picture.width) do table.remove(picture, #picture) end
-		picture.height = picture.height - countOfPixels
+		for i = 1, countOfPixels do picture = image.removeRow(picture, picture.height) end
 	else
 		error("Wrong image cropping mode: only 'fromRight', 'fromLeft', 'fromTop' and 'fromBottom' are supported.")
 	end
+
 	return picture
 end
 
@@ -963,6 +1052,108 @@ function image.replaceColor(picture, fromColor, toColor)
 	return picture
 end
 
+--Функция размытия по Гауссу
+function image.gaussianBlur(picture, radius, force)
+	--Функция для генерации матрицы размытия
+	local function createConvolutionMatrix(maximumValue, matrixSize)
+		local delta = maximumValue / matrixSize
+		local matrix = {}
+		for y = 1, matrixSize do
+			for x = 1, matrixSize do
+				local value = ((x - 1) * delta + (y - 1) * delta) / 2
+				matrix[y] = matrix[y] or {}
+				matrix[y][x] = value
+			end
+		end
+		return matrix
+	end
+
+	--Функция для распределения стартового цвета на указанный пиксель на основе указанного значения матрицы
+	local function spreadPixelToSpecifiedCoordinates(picture, xCoordinate, yCoordinate, matrixValue, startBackground, startForeground, startAlpha, startSymbol)
+		local matrixBackground, matrixForeground, matrixAlpha, matrixSymbol = image.get(picture, xCoordinate, yCoordinate)
+
+		if matrixBackground and matrixForeground then
+			local newBackground = colorlib.alphaBlend(startBackground, matrixBackground, matrixValue)
+			--Пизданись оно все в жопу, ебанина
+			--Короч, смари. Если символ равен пробелу, то мы полюбэ не учитываем цвет текста, верно?
+			--Но в будущих итерациях это цвет будет учтен, поэтому возникали ссаные баги графические
+			--Поэтому даже для ебучего пробела мы присваиваем значение цвета текста, равному НОВОМУ цвету фона
+			--Т.е. вроде бы как они и равны, но потом охуенно все будет, угу
+			local newForeground = matrixSymbol == " " and newBackground or colorlib.alphaBlend(startForeground, matrixForeground, matrixValue)
+
+			image.set(picture, xCoordinate, yCoordinate, newBackground, newForeground, 0x00, matrixSymbol)
+		end
+	end
+
+	--Функция, распределяющая указанный пиксель по соседним пикселям на основе матрицы
+	local function spreadColorToOtherPixels(picture, xStart, yStart, matrix)
+		--Получаем стартовые данные о пикселе
+		local startBackground, startForeground, startAlpha, startSymbol = image.get(picture, xStart, yStart)
+		local xCoordinate, yCoordinate
+		--Перебираем матрицу
+		for yMatrix = 1, #matrix do
+			for xMatrix = 1, #matrix[yMatrix] do
+				--Игнорируем стартовый пиксель, на кой хер его размывать-то?
+				if not (xMatrix == 1 and yMatrix == 1) then
+					--Получаем координаты новых пикселей в изображении
+					--И в обратном направлении матрицы
+					xCoordinate, yCoordinate = xStart - xMatrix + 1, yStart - yMatrix + 1
+					spreadPixelToSpecifiedCoordinates(picture, xCoordinate, yCoordinate, matrix[yMatrix][xMatrix], startBackground, startForeground, startAlpha, startSymbol)
+					--Для начала в правильную сторону матрицы
+					xCoordinate, yCoordinate = xStart + xMatrix - 1, yStart + yMatrix - 1
+					spreadPixelToSpecifiedCoordinates(picture, xCoordinate, yCoordinate, matrix[yMatrix][xMatrix], startBackground, startForeground, startAlpha, startSymbol)
+				end
+			end
+		end
+	end
+
+	--Генерируем матрицу
+	local matrix = createConvolutionMatrix(force or 0x55, radius)
+	--Распределяем все пиксели по изображению
+	for y = 1, picture.height do
+		for x = 1, picture.width do
+			spreadColorToOtherPixels(picture, x, y, matrix)
+		end
+	end
+	return picture
+end
+
+----------------------------------------- Строковая обработка изображений -------------------------------------------------------------------
+
+--Преобразовать изображение в строковую интерпретацию, которая может быть вставлена в код
+--Удобно, если не хочется возиться с файловой системой
+function image.toString(picture)
+	local stringedPicture = {}
+	picture = convertImageColorsTo8Bit(picture)
+	table.insert(stringedPicture, string.format("%02X", picture.width))
+	table.insert(stringedPicture, string.format("%02X", picture.height))
+	for i = 1, #picture, 4 do
+		table.insert(stringedPicture, string.format("%02X", picture[i]))
+		table.insert(stringedPicture, string.format("%02X", picture[i + 1]))
+		table.insert(stringedPicture, string.format("%02X", picture[i + 2]))
+		table.insert(stringedPicture, picture[i + 3])
+	end
+	picture = convertImageColorsTo24Bit(picture)
+	return table.concat(stringedPicture)
+end
+
+--Получить изображение из строковой интерпретации, созданной ранее
+function image.fromString(stringedPicture)
+	local picture = {}
+	local subIndex = 1
+	picture.width = tonumber("0x" .. unicode.sub(stringedPicture, subIndex, subIndex + 1)); subIndex = subIndex + 2
+	picture.height = tonumber("0x" .. unicode.sub(stringedPicture, subIndex, subIndex + 1)); subIndex = subIndex + 2
+	
+	for pixel = 1, picture.width * picture.height do
+		table.insert(picture, tonumber("0x" .. unicode.sub(stringedPicture, subIndex, subIndex + 1))); subIndex = subIndex + 2
+		table.insert(picture, tonumber("0x" .. unicode.sub(stringedPicture, subIndex, subIndex + 1))); subIndex = subIndex + 2
+		table.insert(picture, tonumber("0x" .. unicode.sub(stringedPicture, subIndex, subIndex + 1))); subIndex = subIndex + 2
+		table.insert(picture, unicode.sub(stringedPicture, subIndex, subIndex)); subIndex = subIndex + 1
+	end
+	picture = convertImageColorsTo24Bit(picture)
+	return picture
+end
+
 ----------------------------------------- Основные функции программы -------------------------------------------------------------------
 
 --Сохранить изображение любого поддерживаемого формата
@@ -972,14 +1163,16 @@ function image.save(path, picture, encodingMethod)
 	fs.makeDirectory(fs.path(path))
 	--Получаем формат указанного файла
 	local fileFormat = getFileFormat(path)
-	--Оптимизируем картинку
-	picture = image.optimize(picture)
-	--Открываем файл
-	local file = io.open(path, "w")
-	--Записываем сигнатуру
-	writeSignature(file)
+
 	--Проверяем соответствие формата файла
 	if fileFormat == constants.compressedFileFormat then
+		--Оптимизируем картинку
+		picture = image.optimize(picture)
+		--Открываем файл
+		local file = io.open(path, "w")
+		--Записываем сигнатуру
+		writeSignature(file)
+		--Разбираемся с кодировкой
 		if encodingMethod == 0 or string.lower(encodingMethod) == "raw" then
 			file:write(string.char(encodingMethod))
 			saveRaw(file, picture)
@@ -990,12 +1183,17 @@ function image.save(path, picture, encodingMethod)
 			file:write(string.char(encodingMethod))
 			saveOCIF2(file, picture)
 		elseif encodingMethod == 3 or string.lower(encodingMethod) == "ocif3" then
-			error("Encoding method 3 is deprecated and no longer supported. Use method 4 instead of it.")
+			error("Saving in encoding method 3 is deprecated and no longer supported. Use method 4 instead of it.")
 		elseif encodingMethod == 4 or string.lower(encodingMethod) == "ocif4" then
 			file:write(string.char(encodingMethod))
 			picture = convertImageColorsTo8Bit(picture)
 			saveOCIF2(file, picture, true)
 			picture = convertImageColorsTo24Bit(picture)
+		elseif encodingMethod == 6 then
+			file:close()
+			file = io.open(path, "w")
+			file:write(image.toString(picture))
+			file:close()
 		else
 			file:close()
 			error("Unsupported encoding method.\n")
@@ -1022,15 +1220,15 @@ function image.load(path)
 		--Читаем файлы в зависимости от метода
 		--print("Загружаю файл типа " .. encodingMethod)
 		if encodingMethod == 0 then
-			return loadRaw(file)
+			return image.optimize(loadRaw(file))
 		elseif encodingMethod == 1 then
-			return loadOCIF1(file)
+			return image.optimize(loadOCIF1(file))
 		elseif encodingMethod == 2 then
-			return loadOCIF2(file)
+			return image.optimize(loadOCIF2(file))
 		elseif encodingMethod == 3 then
-			return loadOCIF2(file, true)
+			return image.optimize(loadOCIF2(file, true))
 		elseif encodingMethod == 4 then
-			return loadOCIF2(file, true, true)
+			return image.optimize(loadOCIF2(file, true, true))
 		else
 			file:close()
 			error("Unsupported encoding method: " .. encodingMethod .. "\n")
@@ -1054,9 +1252,9 @@ function image.draw(x, y, picture)
 	for alpha in pairs(picture) do
 		for symbol in pairs(picture[alpha]) do
 			for foreground in pairs(picture[alpha][symbol]) do
-				if gpu.getForeground ~= foreground then gpu.setForeground(foreground) end
+				if component.gpu.getForeground ~= foreground then component.gpu.setForeground(foreground) end
 				for background in pairs(picture[alpha][symbol][foreground]) do
-					if gpu.getBackground ~= background then gpu.setBackground(background) end
+					if component.gpu.getBackground ~= background then component.gpu.setBackground(background) end
 					currentBackground = background
 
 					for yArray in pairs(picture[alpha][symbol][foreground][background]) do
@@ -1065,19 +1263,19 @@ function image.draw(x, y, picture)
 							
 							--Если альфа имеется, но она не совсем прозрачна
 							if (alpha > 0x00 and alpha < 0xFF) or (alpha == 0xFF and symbol ~= " ")then
-								_, _, currentBackground = gpu.get(xPos, yPos)
+								_, _, currentBackground = component.gpu.get(xPos, yPos)
 								currentBackground = colorlib.alphaBlend(currentBackground, background, alpha)
-								gpu.setBackground(currentBackground)
+								component.gpu.setBackground(currentBackground)
 
-								gpu.set(xPos, yPos, symbol)
+								component.gpu.set(xPos, yPos, symbol)
 
 							elseif alpha == 0x00 then
 								if currentBackground ~= background then
 									currentBackground = background
-									gpu.setBackground(currentBackground)
+									component.gpu.setBackground(currentBackground)
 								end
 
-								gpu.set(xPos, yPos, symbol)
+								component.gpu.set(xPos, yPos, symbol)
 							end
 							--ecs.wait()
 						end
@@ -1109,26 +1307,28 @@ local function createSaveAndLoadFiles()
 	image.draw(34, 2, cyka4)
 end
 
------------------------------------------- Место для баловства ------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------
 
--- ecs.prepareToExit()
+-- local picture = image.load("MineOS/System/OS/Icons/Love.pic")
+-- buffer.clear(0xFF8888)
+-- buffer.draw(true)
 
--- local cyka = image.load("3.pic")
--- image.draw(2, 2, cyka)
--- ecs.error(HEXtoSTRING(cyka[1], 6, true))
--- image.draw(8, 2, cyka)
--- createSaveAndLoadFiles()
+-- buffer.image(1, 1, picture)
+-- buffer.draw()
+
+-- local newPicture = transform(picture, 0.5, 2)
+
+-- local columnArray = {}; for i = 1, picture.height do table.insert(columnArray, 0xFFFFFF); table.insert(columnArray, 0x000000); table.insert(columnArray, 0x00); table.insert(columnArray, " ") end
+-- local rowArray = {}; for i = 1, picture.width do table.insert(rowArray, 0xFFFFFF); table.insert(rowArray, 0x000000); table.insert(rowArray, 0x00); table.insert(rowArray, " ") end
+-- local rowArray = image.getRow(picture, 2)
+-- picture = image.insertColumn(picture, 1, columnArray)
+-- picture = image.insertRow(picture, 3, rowArray)
+-- picture = image.removeColumn(picture, 1)
+
+-- buffer.image(1, 19, picture)
+-- buffer.image(1, 19, newPicture)
+-- buffer.draw()
 
 ------------------------------------------------------------------------------------------------------------------------
 
 return image
-
-
-
-
-
-
-
-
-
-
