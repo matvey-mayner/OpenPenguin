@@ -35,14 +35,28 @@ gpu.setResolution(80, 25)
 
 --pcall(proxy.setLabel, "OpenPenguin")
 
-local function DrawButton(x, y, width, height, text, foreground, background)
-  gpu.setForeground(foreground)
-  gpu.setBackground(background)
-  gpu.fill(x, y, width, height, " ")
-  local textX = x + math.floor((width - #text) / 2)
-  local textY = y + math.floor(height / 2)
-  gpu.set(textX, textY, text)
+local function isWithinButton(x, y, bx, by, bw, bh)
+    return x >= bx and x < bx + bw and y >= by and y < by + bh
 end
+
+-- Function to draw the button and set up the event listener
+function DrawButton(x1, y1, width, height, text, foreground, background, callback)
+    gpu.setForeground(foreground)
+    gpu.setBackground(background)
+    gpu.fill(x1, y1, width, height, " ")
+    local textX = x1 + math.floor((width - #text) / 2)
+    local textY = y1 + math.floor(height / 2)
+    gpu.set(textX, textY, text)
+    
+    local function check(_, _, x2, y2)
+        if isWithinButton(x2, y2, x1, y1, width, height) then
+            callback()
+        end
+    end
+    
+    event.listen("touch", check)
+end
+
 
 local function message(str)
   gpu.setForeground(0x000000)
