@@ -192,3 +192,7 @@ end)
 DrawButton(69, 5, 12, 3, "AppShop", 0xFFFFFF, 0xFF00FF, function()
     shell.execute("bin/Control.lua")
 end)
+
+while True then
+    event.pull("touch")
+end
