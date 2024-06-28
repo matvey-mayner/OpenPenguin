@@ -7,7 +7,6 @@ local unicode = require("unicode")
 local computer = require("computer")
 local event = require("event")
 local context = require("context")
-local os = require("os")
 local screen = c.screen
 local gpu = c.gpu
 
@@ -100,7 +99,6 @@ local selectSymbol, nonSelectSymbol = "✔", "  "
 local limit = 40
 local xPos, yPos = xUpdatesList, yUpdatesList
 
---ОЧИЩАЕМ ЭТУ GOVNOTY
 ecs.square(xPos, yPos, limit + 2, 15, colors.main)
 
 for i = drawUpdatesFrom, (drawUpdatesFrom + 4) do
@@ -129,14 +127,14 @@ local function drawMain()
 ecs.square(x, y + heightOfTopBar, width, height - heightOfTopBar, colors.main)
 local xPos, yPos
 if currentMode == 1 then
-xPos, yPos = x + 1, y + heightOfTopBar + 1
+xPos, yPos = x + 1, yPos + 5
 ecs.colorTextWithBack(xPos, yPos, 0x000000, colors.main, "OpenPenguin"); yPos = yPos + 1
-ecs.colorText(xPos, yPos, ecs.colors.lightGray, "Версия 1.2"); yPos = yPos + 2
+ecs.colorText(xPos, yPos, ecs.colors.lightGray, "Версия 1.5"); yPos = yPos + 2
 
-ecs.smartText(xPos, yPos, "§fСистемный блок §8(Нормальный)"); yPos = yPos + 1
+ecs.smartText(xPos, yPos, "§fСистемный блок §8(Офисный)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fПроцессор §8(Для серьезных задач)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fПамять §8(DDR5 с охлаждением "..ram.total.." KB)"); yPos = yPos + 1
-ecs.smartText(xPos, yPos, "§fГрафика §8(Для Всего)"); yPos = yPos + 1
+ecs.smartText(xPos, yPos, "§fГрафика §8(GPU 3 OR GPU 2)"); yPos = yPos + 1
 ecs.smartText(xPos, yPos, "§fСерийный номер §8"..ecs.stringLimit("end", computer.address(), 30)); yPos = yPos + 1
 	
 elseif currentMode == 2 then
