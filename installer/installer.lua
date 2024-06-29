@@ -41,6 +41,14 @@ end
 
 -------------------------------------------------   Дальше Уже Сам Делаю!   ---------------------------------------------------------------
 
+
+local function message(str)
+    gpu.setForeground(0x000000)
+    gpu.setBackground(0x000000)
+    gpu.fill(1, 1, 80, 25, " ")
+    gpu.set(1, 1, str)
+end
+
 local buttonW = 20
 local buttonH = 1
 
@@ -73,8 +81,8 @@ gpu.fill(1, 1, 160, 50, " ")
 ---------------------------------------------------
 
 DrawButton(2, 12, 3, "Установить - Install", 0xFFFFFF, 0x555555, function()
-shell.execute("pastebin run yERLsQNq")
- end)
+    shell.execute("pastebin run yERLsQNq")
+end)
 
 while true do
     event.pull("touch")
