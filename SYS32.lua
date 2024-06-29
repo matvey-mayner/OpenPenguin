@@ -2,6 +2,7 @@ local component = require("component")
 local event = require("event")
 local filesystem = require("filesystem")
 local gpu = component.gpu
+local ecs = require("ECSAPI")
 local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
@@ -13,7 +14,6 @@ local function isWithinButton(x, y, bx, by, bw, bh)
     return x >= bx and x < bx + bw and y >= by and y < by + bh
 end
 
--- Function to draw the button and set up the event listener
 function DrawButton(x1, y1, width, height, text, foreground, background, callback)
     gpu.setForeground(foreground)
     gpu.setBackground(background)
@@ -99,13 +99,11 @@ local function runSettings()
     shell.execute("bin/Control.lua")
 end
 
--- Set screen resolution
 gpu.setResolution(80, 25)
 gpu.setForeground(0x000000)
 gpu.setBackground(0x808080)
 gpu.fill(1, 1, 80, 25, " ")
 
--- Draw buttons
 DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555, function()
     handleCommand("1")
  end)
@@ -152,7 +150,7 @@ gpu.setForeground(0x000000)
 gpu.fill(1, 23, 80, 2, " ")
 gpu.set(34, 24, "OpenPenguin")
 
--- Main loop to keep the program running
+-- Крч Фигня чтобы держать систему в графике, а не в консоле!
 while true do
     event.pull("touch")
 end
