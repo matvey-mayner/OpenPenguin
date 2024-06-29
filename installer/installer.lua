@@ -1,8 +1,9 @@
 ----------------------------------------------   Установщик взят из MineOS спасибо ECS'у   ----------------------------------------------
-local fs = require("filesystem")
+local filesystem = require("filesystem")
 local component = require("component")
 local computer = require("computer")
 local unicode = require("unicode")
+local os = require("os")
 local event = require("event")
 local shell = require("shell")
 local gpu = component.gpu
