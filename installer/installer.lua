@@ -3,6 +3,7 @@ local fs = require("filesystem")
 local component = require("component")
 local computer = require("computer")
 local unicode = require("unicode")
+local event = require("event")
 local shell = require("shell")
 local gpu = component.gpu
 local screen = component.screen
