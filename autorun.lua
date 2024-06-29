@@ -8,7 +8,7 @@ os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/
 os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/SYS32.lua")
 shell.execute("cls")
 
-gpu.setResolution(80, 25)
+--gpu.setResolution(80, 25)
 
 local function drawLoadingBar()
   local barWidth = 50
@@ -36,7 +36,7 @@ end
 
 gpu.setForeground(0xFFFFFF)
 gpu.setBackground(0x808080)
-gpu.fill(1, 1, 80, 25, " ")
+gpu.fill(1, 1, 160, 50, " ")
 
 gpu.setBackground(0x808080)
 gpu.setForeground(0xFFFFFF)
