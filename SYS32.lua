@@ -149,11 +149,6 @@ DrawButton(69, 5, 12, 3, "Settings", 0xFFFFFF, 0x555555, function()
     shell.execute("bin/Control.lua")
 end)
 
-gpu.setBackground(0xFFFFFF)
-gpu.setForeground(0x000000)
-gpu.fill(1, 78, 160, 2, " ")
-gpu.set(34, 24, "OpenPenguin")
-
 -- Крч Фигня чтобы держать систему в графике, а не в консоле!
 while true do
     event.pull("touch")
