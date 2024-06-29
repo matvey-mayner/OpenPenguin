@@ -151,7 +151,7 @@ end)
 
 gpu.setBackground(0xFFFFFF)
 gpu.setForeground(0x000000)
-gpu.fill(1, 23, 160, 2, " ")
+gpu.fill(1, 78, 160, 2, " ")
 gpu.set(34, 24, "OpenPenguin")
 
 -- Крч Фигня чтобы держать систему в графике, а не в консоле!
