@@ -99,10 +99,14 @@ local function runSettings()
     shell.execute("bin/Control.lua")
 end
 
-gpu.setResolution(80, 25)
+-----------    Делаем только под видюхи 3-тего уровня  ---------------
+
+--gpu.setResolution(80, 25)
 gpu.setForeground(0x000000)
 gpu.setBackground(0x808080)
-gpu.fill(1, 1, 80, 25, " ")
+gpu.fill(1, 1, 160, 50, " ")
+
+-----------------------------------------------------------------------
 
 DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555, function()
     handleCommand("1")
