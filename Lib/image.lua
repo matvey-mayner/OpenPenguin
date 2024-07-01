@@ -2,7 +2,7 @@
 
 --[[
 	
-	Автор: P#$%#@#
+	Автор: Pornogion
 		VK: https://vk.com/id88323331
 	Соавтор: IT
 		VK: https://vk.com/id7799889
