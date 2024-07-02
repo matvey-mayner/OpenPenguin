@@ -105,19 +105,19 @@ mayner.DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555, function()
     handleCommand("5")
 end)
 
-DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(10, 5, 12, 3, "Flappy Bird", 0xFFFFFF, 0x555555, function()
     shell.execute("bin/flappybird.lua")
 end)
 
-DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(24, 5, 12, 3, "Snake", 0xFFFFFF, 0x555555, function()
     shell.execute("bin/Snake.lua")
 end)
 
-DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(38, 5, 12, 3, "File Manager", 0xFFFFFF, 0x555555, function()
     shell.execute("fileman.lua")
 end)
 
-DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(55, 5, 12, 3, "AppShop", 0xFFFFFF, 0x555555, function()
     shell.execute("cls")
     shell.execute("AppShop.lua")
 end)
