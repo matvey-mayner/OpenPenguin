@@ -1,6 +1,7 @@
 local component = require("component")
 local event = require("event")
 local os = require("os")
+local prog = require("program")
 local shell = require("shell")
 local gpu = component.gpu
 
@@ -44,4 +45,4 @@ gpu.set(34, 12, "OpenPenguin")
 
 drawLoadingBar()
 
-dofile("SYS32.lua")
+assert(prog.execute("system/SYS32.lua"))
