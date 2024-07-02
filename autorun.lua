@@ -5,11 +5,11 @@ local prog = require("program")
 local shell = require("shell")
 local gpu = component.gpu
 
-os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/autorun.lua")
-os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/SYS32.lua")
+os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/autorun.lua /system/main.lua")
+os.execute("wget -f https://raw.githubusercontent.com/matvey-mayner/OpenPenguin/main/SYS32.lua /system/SYS32.lua")
 shell.execute("cls")
 
---gpu.setResolution(80, 25)
+gpu.setResolution(80, 25)
 
 local function drawLoadingBar()
   local barWidth = 50
