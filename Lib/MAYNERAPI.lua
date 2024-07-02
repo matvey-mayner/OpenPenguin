@@ -30,7 +30,7 @@ function MAYNERAPI.DrawButton(x1, y1, width, height, text, foreground, backgroun
     event.listen("touch", check)
 end
 
-function MAYNERAPI.message(title, message, oldcolor) ----Добавил Мой Друг)
+function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой Друг)
     local width = math.max(30, #message + 10)
     local height = 7  -- Fixed height for simplicity
     local x = math.floor((gpu.getResolution() - width) / 2)
