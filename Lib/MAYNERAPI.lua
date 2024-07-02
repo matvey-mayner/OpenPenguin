@@ -69,9 +69,9 @@ end
 
 function MAYNERAPI.Loop
     
-while true do      
-  event.pull("touch")
-end
+    while true do      
+      event.pull("touch")
+    end
     
 end    
 
