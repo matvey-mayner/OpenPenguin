@@ -5,30 +5,7 @@ local gpu = component.gpu
 local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
-
-local buttonW = 20
-local buttonH = 1
-
-local function isWithinButton(x, y, bx, by, bw, bh)
-    return x >= bx and x < bx + bw and y >= by and y < by + bh
-end
-
-function DrawButton(x1, y1, width, height, text, foreground, background, callback)
-    gpu.setForeground(foreground)
-    gpu.setBackground(background)
-    gpu.fill(x1, y1, width, height, " ")
-    local textX = x1 + math.floor((width - #text) / 2)
-    local textY = y1 + math.floor(height / 2)
-    gpu.set(textX, textY, text)
-    
-    local function check(_, _, x2, y2)
-        if isWithinButton(x2, y2, x1, y1, width, height) then
-            callback()
-        end
-    end
-    
-    event.listen("touch", check)
-end
+local mayner = require("MAYNERAPI")
 
 local function message(str)
     gpu.setForeground(0x000000)
@@ -107,23 +84,23 @@ gpu.fill(1, 1, 160, 50, " ")
 
 -----------------------------------------------------------------------
 
-DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555, function()
     handleCommand("1")
  end)
 
-DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(24, 2, 12, 3, "Reboot", 0xFFFFFF, 0x555555, function()
     handleCommand("2")
 end)
 
-DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(38, 2, 15, 3, "Random Number", 0xFFFFFF, 0x555555, function()
     handleCommand("3")
 end)
 
-DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(55, 2, 12, 3, "OpenOS", 0xFFFFFF, 0x555555, function()
     handleCommand("4")
 end)
 
-DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555, function()
+mayner.DrawButton(69, 2, 12, 3, "Info", 0xFFFFFF, 0x555555, function()
     handleCommand("5")
 end)
 
