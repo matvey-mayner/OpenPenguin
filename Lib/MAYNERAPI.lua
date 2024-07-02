@@ -65,14 +65,6 @@ function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой �
             event.ignore("touch", check)
         end
     end
-end
-
-function MAYNERAPI.Loop
-    
-    while true do      
-      event.pull("touch")
-    end
-    
-end    
+end  
 
 return MAYNERAPI
