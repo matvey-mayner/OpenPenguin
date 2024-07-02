@@ -1,7 +1,7 @@
-local gpu = component.gpu
-local screen = component.screen
 local component = require("component")
 local event = require("event")
+local gpu = component.gpu
+local screen = component.screen
 local computer = require("computer")
 
 local buttonW = 20
