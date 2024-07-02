@@ -6,6 +6,7 @@ local computer = require("computer")
 local shell = require("shell")
 local os = require("os")
 local mayner = require("MAYNERAPI")
+local prog = require("program")
 
 local function message(str)
     gpu.setForeground(0x000000)
