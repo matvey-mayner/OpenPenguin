@@ -30,4 +30,43 @@ function MAYNERAPI.DrawButton(x1, y1, width, height, text, foreground, backgroun
     event.listen("touch", check)
 end
 
+function MAYNERAPI.DrawMessage(title, message, oldcolor)
+    local width = math.max(30, #message + 10)
+    local height = 7  -- Fixed height for simplicity
+    local x = math.floor((gpu.getResolution() - width) / 2)
+    local y = math.floor((25 - height) / 2)
+    
+    gpu.setBackground(0x333333)
+    gpu.fill(x, y, width, height, " ")
+
+    -- Calculate text position
+    local titleX = x + math.floor((width - #title) / 2)
+    local titleY = y + 1
+    local messageX = x + math.floor((width - #message) / 2)
+    local messageY = y + 3
+
+    gpu.setForeground(0xFFFFFF)  -- White text
+    gpu.set(titleX, titleY, title)
+    gpu.set(messageX, messageY, message)
+
+    local buttonWidth = width - 4
+    local buttonHeight = 1
+    local buttonX = x + 2
+    local buttonY = y + height - 2
+    gpu.setBackground(0x333333) 
+    gpu.setForeground(0xFFFFFF)
+    gpu.fill(buttonX, buttonY, buttonWidth, buttonHeight, " ")
+    gpu.set(buttonX + (buttonWidth - 6) / 2, buttonY, "OK")
+
+    -- Event handler for closing the message box
+    local function check(_, _, x2, y2)
+        if x2 >= buttonX and x2 < buttonX + buttonWidth and y2 == buttonY then
+            gpu.setBackground(oldcolor)
+            gpu.fill(x, y, width, height, " ")
+            event.ignore("touch", check)
+        end
+    end
+
+    event.listen("touch", check)
+end
 return MAYNERAPI
