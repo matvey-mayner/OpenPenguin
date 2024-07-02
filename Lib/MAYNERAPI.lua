@@ -4,6 +4,8 @@ local gpu = component.gpu
 local screen = component.screen
 local computer = require("computer")
 
+MAYNERAPI = {}
+
 local buttonW = 20
 local buttonH = 1
 
@@ -27,3 +29,5 @@ function MAYNERAPI.DrawButton(x1, y1, width, height, text, foreground, backgroun
     
     event.listen("touch", check)
 end
+
+return MAYNERAPI
