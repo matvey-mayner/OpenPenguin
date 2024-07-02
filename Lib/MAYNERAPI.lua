@@ -27,7 +27,9 @@ function MAYNERAPI.DrawButton(x1, y1, width, height, text, foreground, backgroun
         end
     end
     
-    event.listen("touch", check)
+   while true do
+    event.pull("touch")
+   end
 end
 
 function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой Друг)
@@ -67,6 +69,8 @@ function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой �
         end
     end
 
-    event.listen("touch", check)
+while true do
+    event.pull("touch")
+   end
 end
 return MAYNERAPI
