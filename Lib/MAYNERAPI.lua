@@ -68,9 +68,11 @@ function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой �
 end
 
 function MAYNERAPI.Loop
-while true do
+    
+while true do      
   event.pull("touch")
 end
+    
 end    
 
 return MAYNERAPI
