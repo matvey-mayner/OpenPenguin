@@ -116,14 +116,11 @@ local function runSettings()
     shell.execute("bin/Control.lua")
 end
 
------------    Делаем только под видюхи 3-тего уровня  ---------------
-
---gpu.setResolution(80, 25)
+gpu.setResolution(80, 25)
 gpu.setForeground(0x000000)
 gpu.setBackground(0x808080)
-gpu.fill(1, 1, 160, 50, " ")
+gpu.fill(1, 1, 80, 25, " ")
 
------------------------------------------------------------------------
 
 mayner.DrawButton(10, 2, 12, 3, "Shutdown", 0xFFFFFF, 0x555555, function()
     handleCommand("1")
@@ -165,6 +162,11 @@ end)
 --DrawButton(69, 5, 12, 3, "Settings", 0xFFFFFF, 0x555555, function()
 --    shell.execute("bin/Control.lua")
 --end)
+
+gpu.setBackground(0xFFFFFF)
+gpu.setForeground(0x000000)
+gpu.fill(1, 23, 80, 2, " ")
+gpu.set(34, 24, "OpenPenguin")
 
 -- Крч Фигня чтобы держать систему в графике, а не в консоле!
 while true do
