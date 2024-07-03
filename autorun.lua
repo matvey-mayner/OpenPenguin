@@ -1,6 +1,7 @@
 local component = require("component")
 local event = require("event")
 local os = require("os")
+local package = require("package")
 local prog = require("program")
 local shell = require("shell")
 local gpu = component.gpu
