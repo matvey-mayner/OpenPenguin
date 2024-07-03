@@ -1,7 +1,6 @@
 local component = require("component")
 local event = require("event")
 local os = require("os")
-local shell = require("shell")
 local gpu = component.gpu
 
 gpu.setResolution(80, 25)
@@ -45,7 +44,6 @@ local event = require("event")
 local filesystem = require("filesystem")
 local gpu = component.gpu
 local computer = require("computer")
-local shell = require("shell")
 local os = require("os")
 local mayner = require("MAYNERAPI")
 local prog = require("program")
