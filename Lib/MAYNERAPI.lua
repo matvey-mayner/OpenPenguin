@@ -31,20 +31,19 @@ end
 
 function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой Друг)
     local width = math.max(30, #message + 10)
-    local height = 7  -- Fixed height for simplicity
+    local height = 7 
     local x = math.floor((gpu.getResolution() - width) / 2)
     local y = math.floor((25 - height) / 2)
     
     gpu.setBackground(0x333333)
     gpu.fill(x, y, width, height, " ")
 
-    -- Calculate text position
     local titleX = x + math.floor((width - #title) / 2)
     local titleY = y + 1
     local messageX = x + math.floor((width - #message) / 2)
     local messageY = y + 3
 
-    gpu.setForeground(0xFFFFFF)  -- White text
+    gpu.setForeground(0xFFFFFF)
     gpu.set(titleX, titleY, title)
     gpu.set(messageX, messageY, message)
 
@@ -57,7 +56,6 @@ function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой �
     gpu.fill(buttonX, buttonY, buttonWidth, buttonHeight, " ")
     gpu.set(buttonX + (buttonWidth - 6) / 2, buttonY, "OK")
 
-    -- Event handler for closing the message box
     local function check(_, _, x2, y2)
         if x2 >= buttonX and x2 < buttonX + buttonWidth and y2 == buttonY then
             gpu.setBackground(oldcolor)
@@ -66,5 +64,29 @@ function MAYNERAPI.Message(title, message, oldcolor) ----Добавил Мой �
         end
     end
 end  
+
+function MAYNERAPI.Loading(posX, posY, barW, barH)
+  local barWidth = #barW
+  local barHeight = #barH
+  local barX = math.floor((#posX - #barW) / 2)
+  local barY = #posY
+
+  gpu.setForeground(0x00a6ff)
+  gpu.setBackground(0x000000)
+  gpu.fill(barX, barY, barWidth, barHeight, " ")
+
+  local progress = 0
+  while progress <= barWidth do
+    gpu.setForeground(0xFFFFFF)
+    gpu.setBackground(0xFFFFFF)
+    gpu.fill(barX, barY, progress, barHeight, " ")
+    gpu.setForeground(0x000000)
+    gpu.setBackground(0x000000)
+    gpu.fill(barX + progress, barY, 1, barHeight, " ")
+
+    os.sleep(0.05)
+    progress = progress + 1
+  end
+end
 
 return MAYNERAPI
